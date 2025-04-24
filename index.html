@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PcXpress</title>
+    <link rel="stylesheet" href="css/style.css" />
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome (icônes) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <!-- AOS (Animation on Scroll) -->
+    <link href="libs/aos/aos.css" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- HEADER -->
+    <!-- HEADER PRINCIPAL -->
+    <header class="site-header">
+      <div class="container nav-container">
+        <div class="logo-section">
+          <img src="image/head.png" alt="Main visual" loading="lazy"/>
+        </div>
+        <nav class="nav">
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="about.html">A propos</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  <!-- SOUS-MENU PRODUITS (TOUJOURS VISIBLE) -->
+  <nav class="product-submenu">
+    <ul>
+      <li><a href="telephones.html">Téléphones</a></li>
+      <li><a href="laptops.html">Laptops</a></li>
+      <li><a href="accessoires.html" class="active">Accessoires</a></li>
+      <li><a href="speakers.html">Haut-parleurs</a></li>
+      <a href="panier.html">🧺Panier🛒</a>
+    </ul>
+  </nav>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main>
+        <section class="hero" data-aos="fade-up">
+            <h2>Bienvenue chez TechZone</h2>
+            <p>Découvrez les dernières nouveautés en téléphones, ordinateurs portables et gadgets high-tech</p>
+            <a href="telephones.html" class="btn">Voir les produits</a>
+        </section>
+
+        <!-- Autres sections à venir -->
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="index.html">Accueil</a>
+                <a href="about.html">À propos</a>
+                <a href="contact.html">Contact</a>
+                <a href="panier.html">Panier</a>
+            </div>
+            <div class="footer-contact">
+                <p>Email : kieftraphterjoly@gmail.com</p>
+                <p>Téléphone : 44795902</p>
+            </div>
+            <div class="footer-socials">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+            <p class="copyright">© 2025 Rakieft Webdev</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/script.js"></script>
+    <script src="libs/aos/aos.js"></script>
+    <script>
+        AOS.init(); // Activation de l'animation AOS
+    </script>
+</body>
+</html>
