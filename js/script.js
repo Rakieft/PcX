@@ -23,43 +23,34 @@ const units = 'imperial';
 const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`;
 const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${units}&appid=${apiKey}`;
 
-// Fetch Current Weather
+// METEO ACTUELLE
 fetch(weatherUrl)
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
         document.getElementById('current-temp').textContent = `${Math.round(data.main.temp)}°F`;
         document.getElementById('weather-description').textContent = data.weather[0].description;
         document.getElementById('high-temp').textContent = `${Math.round(data.main.temp_max)}°F`;
         document.getElementById('low-temp').textContent = `${Math.round(data.main.temp_min)}°F`;
         document.getElementById('humidity').textContent = `${data.main.humidity}%`;
-
-        // Convert UNIX timestamp to readable time for sunrise and sunset
-        const sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
-        const sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString();
-        document.getElementById('sunrise').textContent = sunrise;
-        document.getElementById('sunset').textContent = sunset;
-
-        // Weather Icon
-        const iconCode = data.weather[0].icon;
+        document.getElementById('sunrise').textContent = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+        document.getElementById('sunset').textContent = new Date(data.sys.sunset * 1000).toLocaleTimeString();
         document.getElementById('weather-icon').src = `images/weather.svg`;
         document.getElementById('weather-icon').alt = data.weather[0].description;
     })
-    .catch(error => console.error('Error fetching current weather:', error));
+    .catch(err => console.error('Erreur météo actuelle :', err));
 
-
+// METEO PRÉVISION
 fetch(forecastUrl)
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-        
-        const forecastDays = [0, 8, 16]; 
-
-        document.getElementById('day1-temp').textContent = `${Math.round(data.list[forecastDays[0]].main.temp)}°F`;
-        document.getElementById('day2-temp').textContent = `${Math.round(data.list[forecastDays[1]].main.temp)}°F`;
-        document.getElementById('day3-temp').textContent = `${Math.round(data.list[forecastDays[2]].main.temp)}°F`;
+        const days = [0, 8, 16];
+        document.getElementById('day1-temp').textContent = `${Math.round(data.list[days[0]].main.temp)}°F`;
+        document.getElementById('day2-temp').textContent = `${Math.round(data.list[days[1]].main.temp)}°F`;
+        document.getElementById('day3-temp').textContent = `${Math.round(data.list[days[2]].main.temp)}°F`;
     })
-    .catch(error => console.error('Error fetching forecast data:', error));
+    .catch(err => console.error('Erreur météo prévision :', err));
 
-// --------- AJOUTER AU PANIER (AVEC COULEUR) -----------
+// --------- AJOUTER AU PANIER ---------
 function setupAddToCartButtons() {
   const addButtons = document.querySelectorAll(".add-to-cart");
 
@@ -80,7 +71,7 @@ function setupAddToCartButtons() {
 
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-      const existing = cart.find(item => item.id === product.id && item.color === product.color);
+      const existing = cart.find(p => p.id === product.id && p.color === product.color);
       if (existing) {
         existing.quantity += 1;
       } else {
@@ -88,12 +79,12 @@ function setupAddToCartButtons() {
       }
 
       localStorage.setItem("cart", JSON.stringify(cart));
-      alert(`${product.name} (${product.color}) a été ajouté au panier !`);
+      alert(`${product.name} (${product.color}) ajouté au panier !`);
     });
   });
 }
 
-// --------- AFFICHER LE PANIER -----------
+// --------- AFFICHER LE PANIER ---------
 function loadCartItems() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const container = document.getElementById("cart-container");
@@ -111,7 +102,7 @@ function loadCartItems() {
         <h3>${product.name}</h3>
         <p>Couleur : ${product.color}</p>
         <p>Quantité : ${product.quantity}</p>
-        <p>Prix unitaire : ${product.price.toLocaleString()} €</p>
+        <p>Prix unitaire : ${product.price.toLocaleString()} $</p>
         <button class="remove-btn">Retirer</button>
       </div>
     `;
@@ -122,7 +113,7 @@ function loadCartItems() {
   updateCartTotal();
 }
 
-// --------- SUPPRIMER PRODUIT -----------
+// --------- SUPPRIMER PRODUIT ---------
 function setupRemoveButtons() {
   const buttons = document.querySelectorAll('.remove-btn');
   buttons.forEach(button => {
@@ -131,7 +122,7 @@ function setupRemoveButtons() {
       const id = parseInt(item.getAttribute('data-id'));
       const color = item.querySelector("p:nth-child(2)").textContent.split(": ")[1];
 
-      if (confirm("Voulez-vous vraiment retirer cet article du panier ?")) {
+      if (confirm("Voulez-vous retirer cet article ?")) {
         item.style.opacity = 0;
         setTimeout(() => {
           removeFromCart(id, color);
@@ -145,28 +136,79 @@ function setupRemoveButtons() {
 
 function removeFromCart(id, color) {
   let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  cart = cart.filter(product => !(product.id === id && product.color === color));
+  cart = cart.filter(p => !(p.id === id && p.color === color));
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// --------- TOTAL -----------
+// --------- TOTAL ---------
 function updateCartTotal() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const total = cart.reduce((sum, product) => sum + (product.price * product.quantity), 0);
-
+  const total = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
   const totalDisplay = document.querySelector(".cart-summary h3");
-  if (totalDisplay) totalDisplay.textContent = `Total : ${total.toLocaleString()} €`;
+  if (totalDisplay) totalDisplay.textContent = `Total : ${total.toLocaleString()} $`;
+
+  const totalElement = document.getElementById('cart-total');
+  if (totalElement) totalElement.textContent = total + " $";
 }
 
-// --------- CHECKOUT -----------
+// --------- CHECKOUT ---------
 function setupCheckoutButton() {
   const checkoutBtn = document.getElementById("checkout-btn");
   if (!checkoutBtn) return;
 
   checkoutBtn.addEventListener("click", () => {
-    alert("Merci pour votre commande ! (Simulation)");
-    localStorage.removeItem("cart");
-    loadCartItems();
-    updateCartTotal();
+    const nomClient = document.getElementById("nom-client")?.value.trim();
+    if (!nomClient) {
+      alert("Veuillez entrer votre nom pour valider la commande.");
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const total = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+
+    localStorage.setItem("nomClient", nomClient);
+    localStorage.setItem("totalCommande", total);
+    localStorage.setItem("panier", JSON.stringify(cart));
+
+    window.location.href = "recu.html";
   });
 }
+
+// -------------------recu---------------------//
+document.addEventListener("DOMContentLoaded", () => {
+  const nomClient = localStorage.getItem("nomClient") || "Client inconnu";
+  const totalCommande = localStorage.getItem("totalCommande") || "0";
+  const panier = JSON.parse(localStorage.getItem("panier")) || [];
+
+  const recuContainer = document.getElementById("recu-details");
+  if (!recuContainer) return;
+
+  const clientInfo = document.createElement("p");
+  clientInfo.textContent = `👤 Nom du client : ${nomClient}`;
+  recuContainer.appendChild(clientInfo);
+
+  if (panier.length === 0) {
+    const emptyMsg = document.createElement("p");
+    emptyMsg.textContent = "Aucun article trouvé dans la commande.";
+    recuContainer.appendChild(emptyMsg);
+    return;
+  }
+
+  panier.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "recu-item";
+    div.innerHTML = `
+      <p><strong>${item.name}</strong></p>
+      <p>Couleur : ${item.color}</p>
+      <p>Quantité : ${item.quantity}</p>
+      <p>Prix unitaire : ${item.price.toLocaleString()} $</p>
+     
+    `;
+    recuContainer.appendChild(div);
+  });
+
+  const totalDiv = document.createElement("div");
+  totalDiv.className = "recu-total";
+  totalDiv.textContent = `Total : ${parseFloat(totalCommande).toLocaleString()} $`;
+  recuContainer.appendChild(totalDiv);
+});

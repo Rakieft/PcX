@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PcXpress</title>
+  <title>PCXPRESS </title>
   <link rel="stylesheet" href="css/style.css" />
-  
+  <link rel="icon" href="image/icon.png" type="image/x-icon">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
   
@@ -45,11 +45,29 @@
   <main class="cart-section">
     <h2>Votre Panier</h2>
     <div id="cart-container" class="cart-items"></div>
+
     <div class="cart-summary">
-      <h3>Total : 0 €</h3>
+      <h3>Total : <span id="cart-total">0 €</span></h3>
     </div>
+
+    <div class="client-info">
+      <label for="nom-client">Nom du client :</label>
+      <input type="text" id="nom-client" placeholder="Entrez votre nom complet" />
+    </div>
+
+    <div class="paiement-info">
+      <h3>Informations de paiement</h3>
+      <ul>
+        <li><strong>Banque BUH :</strong> PCXPRESS | RIB : 001 122 334455</li>
+        <li><strong>Banque UNIBANK :</strong> PCXPRESS | RIB : 002 233 445566</li>
+        <li><strong>Banque SOGEBANK :</strong> PCXPRESS | RIB : 003 344 556677</li>
+      </ul>
+      <p>Veuillez effectuer le virement vers l'une des banques ci-dessus et prendre une capture d'écran du virement avant de confirmer votre commande..</p>
+      <p><strong>NB:</strong>Dans la description du transfert, écrivez le même nom que celui que vous avez mis ci-dessus comme nom du client.</p>
+    </div>
+
     <div class="cart-actions">
-      <button id="checkout-btn" class="btn checkout">Passer à la caisse</button>
+      <button id="checkout-btn" class="btn checkout">Passer la commande</button>
     </div>
   </main>
 

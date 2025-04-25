@@ -580,9 +580,83 @@ footer p {
     background-color: #084298;
   }
 
+  /*------------------------- Style général pour les sections client et paiement------------------------------------------ */
+.client-infos, .paiement-infos {
+  background-color: #333;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Titres des sections */
+.client-info h2, .paiement-info h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Champs de formulaire */
+.client-info input, .paiement-info input,
+.client-info select, .paiement-info select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+/*----------------------------------------------------recu page-------------------------------------------*/
+.recu-container {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  padding: 10px;
+}
+
+.recu-container   h1 {
+  text-align: center;
+  color: #333;
+}
+
+.recu-details p {
+  font-size: 0.8rem;
+  margin: 10px 0;
+}
+
+.recu-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.recu-total {
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.btn-accueil {
+  display: block;
+  width: 96%;
+  padding: 12px;
+  margin-top: 25px;
+  background: #ff6f00;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
 
 
-  /* page about */
+  /* -------------------------------------------------page about----------------------------------------------------------- */
   .about-hero {
     background: linear-gradient(to right, #173362, #8392AB);
     color: white;
