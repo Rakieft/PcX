@@ -77,6 +77,10 @@ body {
     text-align: center;
   }
 
+  .logo-section img {
+   margin-left: 50px;
+  }
+
   .nav ul {
     flex-direction: row;
     justify-content: center;
