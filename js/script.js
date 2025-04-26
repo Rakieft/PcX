@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
   loadCartItems();
   setupCheckoutButton();
   updateCartCount();
+  loadRecuPage();
 });
 
 // --------- MÉTÉO ---------
@@ -67,6 +68,7 @@ function setupAddToCartButtons() {
         price: parseFloat(button.getAttribute("data-price")),
         image: button.getAttribute("data-image"),
         color: selectedColor,
+        description: button.getAttribute("data-description") || "Pas de description",
         quantity: 1
       };
 
@@ -98,11 +100,13 @@ function loadCartItems() {
     const item = document.createElement("div");
     item.className = "cart-item";
     item.setAttribute("data-id", product.id);
+    item.setAttribute("data-color", product.color);
     item.innerHTML = `
       <img src="${product.image}" alt="${product.name}">
       <div class="item-details">
         <h3>${product.name}</h3>
         <p>Couleur : ${product.color}</p>
+        <p>Description : ${product.description}</p>
         <p>Quantité : ${product.quantity}</p>
         <p>Prix unitaire : ${product.price.toLocaleString()} $</p>
         <button class="remove-btn">Retirer</button>
@@ -122,7 +126,7 @@ function setupRemoveButtons() {
     button.addEventListener('click', () => {
       const item = button.closest('.cart-item');
       const id = parseInt(item.getAttribute('data-id'));
-      const color = item.querySelector("p:nth-child(2)").textContent.split(": ")[1];
+      const color = item.getAttribute('data-color');
 
       if (confirm("Voulez-vous retirer cet article ?")) {
         item.style.opacity = 0;
@@ -152,7 +156,7 @@ function updateCartTotal() {
   if (totalDisplay) totalDisplay.textContent = `Total : ${total.toLocaleString()} $`;
 
   const totalElement = document.getElementById('cart-total');
-  if (totalElement) totalElement.textContent = total + " $";
+  if (totalElement) totalElement.textContent = `${total.toLocaleString()} $`;
 }
 
 // --------- CHECKOUT ---------
@@ -162,8 +166,10 @@ function setupCheckoutButton() {
 
   checkoutBtn.addEventListener("click", () => {
     const nomClient = document.getElementById("nom-client")?.value.trim();
-    if (!nomClient) {
-      alert("Veuillez entrer votre nom pour valider la commande.");
+    const emailClient = document.getElementById("email-client")?.value.trim();
+
+    if (!nomClient || !emailClient) {
+      alert("Veuillez entrer votre nom et votre email pour valider la commande.");
       return;
     }
 
@@ -181,7 +187,7 @@ function setupCheckoutButton() {
       produits: cart.map(item =>
         `${item.name} (${item.color}) x${item.quantity} - ${item.price.toLocaleString()} $`
       ).join('\n'),
-      email_client: document.getElementById("email-client")?.value || "email@inconnu.com",
+      email_client: emailClient,
       email_vendeur: "kieftraphterjoly@gmail.com"
     };
 
@@ -198,7 +204,7 @@ function setupCheckoutButton() {
 }
 
 // --------- PAGE REÇU ---------
-document.addEventListener("DOMContentLoaded", () => {
+function loadRecuPage() {
   const recuContainer = document.getElementById("recu-details");
   if (!recuContainer) return;
 
@@ -223,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
     div.innerHTML = `
       <p><strong>${item.name}</strong></p>
       <p>Couleur : ${item.color}</p>
+      <p>Description : ${item.description}</p>
       <p>Quantité : ${item.quantity}</p>
       <p>Prix unitaire : ${item.price.toLocaleString()} $</p>
     `;
@@ -233,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
   totalDiv.className = "recu-total";
   totalDiv.textContent = `Total : ${parseFloat(totalCommande).toLocaleString()} $`;
   recuContainer.appendChild(totalDiv);
-});
+}
 
 // --------- COMPTEUR DYNAMIQUE DU PANIER DANS LE HEADER ---------
 function updateCartCount() {
