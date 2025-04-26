@@ -14,41 +14,42 @@ document.addEventListener("DOMContentLoaded", function () {
   setupAddToCartButtons();
   loadCartItems();
   setupCheckoutButton();
+  updateCartCount();
 });
 
 // --------- MÉTÉO ---------
 const apiKey = '9f26309485957c2bd9641a631b5817c8';
-const city = 'HAITI'; 
-const units = 'imperial'; 
+const city = 'HAITI';
+const units = 'imperial';
 const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`;
 const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${units}&appid=${apiKey}`;
 
 // METEO ACTUELLE
 fetch(weatherUrl)
-    .then(res => res.json())
-    .then(data => {
-        document.getElementById('current-temp').textContent = `${Math.round(data.main.temp)}°F`;
-        document.getElementById('weather-description').textContent = data.weather[0].description;
-        document.getElementById('high-temp').textContent = `${Math.round(data.main.temp_max)}°F`;
-        document.getElementById('low-temp').textContent = `${Math.round(data.main.temp_min)}°F`;
-        document.getElementById('humidity').textContent = `${data.main.humidity}%`;
-        document.getElementById('sunrise').textContent = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
-        document.getElementById('sunset').textContent = new Date(data.sys.sunset * 1000).toLocaleTimeString();
-        document.getElementById('weather-icon').src = `images/weather.svg`;
-        document.getElementById('weather-icon').alt = data.weather[0].description;
-    })
-    .catch(err => console.error('Erreur météo actuelle :', err));
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('current-temp').textContent = `${Math.round(data.main.temp)}°F`;
+    document.getElementById('weather-description').textContent = data.weather[0].description;
+    document.getElementById('high-temp').textContent = `${Math.round(data.main.temp_max)}°F`;
+    document.getElementById('low-temp').textContent = `${Math.round(data.main.temp_min)}°F`;
+    document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+    document.getElementById('sunrise').textContent = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+    document.getElementById('sunset').textContent = new Date(data.sys.sunset * 1000).toLocaleTimeString();
+    document.getElementById('weather-icon').src = `images/weather.svg`;
+    document.getElementById('weather-icon').alt = data.weather[0].description;
+  })
+  .catch(err => console.error('Erreur météo actuelle :', err));
 
 // METEO PRÉVISION
 fetch(forecastUrl)
-    .then(res => res.json())
-    .then(data => {
-        const days = [0, 8, 16];
-        document.getElementById('day1-temp').textContent = `${Math.round(data.list[days[0]].main.temp)}°F`;
-        document.getElementById('day2-temp').textContent = `${Math.round(data.list[days[1]].main.temp)}°F`;
-        document.getElementById('day3-temp').textContent = `${Math.round(data.list[days[2]].main.temp)}°F`;
-    })
-    .catch(err => console.error('Erreur météo prévision :', err));
+  .then(res => res.json())
+  .then(data => {
+    const days = [0, 8, 16];
+    document.getElementById('day1-temp').textContent = `${Math.round(data.list[days[0]].main.temp)}°F`;
+    document.getElementById('day2-temp').textContent = `${Math.round(data.list[days[1]].main.temp)}°F`;
+    document.getElementById('day3-temp').textContent = `${Math.round(data.list[days[2]].main.temp)}°F`;
+  })
+  .catch(err => console.error('Erreur météo prévision :', err));
 
 // --------- AJOUTER AU PANIER ---------
 function setupAddToCartButtons() {
@@ -70,8 +71,8 @@ function setupAddToCartButtons() {
       };
 
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
       const existing = cart.find(p => p.id === product.id && p.color === product.color);
+
       if (existing) {
         existing.quantity += 1;
       } else {
@@ -79,6 +80,7 @@ function setupAddToCartButtons() {
       }
 
       localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
       alert(`${product.name} (${product.color}) ajouté au panier !`);
     });
   });
@@ -128,6 +130,7 @@ function setupRemoveButtons() {
           removeFromCart(id, color);
           item.remove();
           updateCartTotal();
+          updateCartCount();
         }, 500);
       }
     });
@@ -144,6 +147,7 @@ function removeFromCart(id, color) {
 function updateCartTotal() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const total = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
+
   const totalDisplay = document.querySelector(".cart-summary h3");
   if (totalDisplay) totalDisplay.textContent = `Total : ${total.toLocaleString()} $`;
 
@@ -170,18 +174,37 @@ function setupCheckoutButton() {
     localStorage.setItem("totalCommande", total);
     localStorage.setItem("panier", JSON.stringify(cart));
 
+    // EmailJS - envoi du reçu
+    const emailParams = {
+      nom_client: nomClient,
+      total_commande: `${total.toLocaleString()} $`,
+      produits: cart.map(item =>
+        `${item.name} (${item.color}) x${item.quantity} - ${item.price.toLocaleString()} $`
+      ).join('\n'),
+      email_client: document.getElementById("email-client")?.value || "email@inconnu.com",
+      email_vendeur: "kieftraphterjoly@gmail.com"
+    };
+
+    emailjs.send("service_xxx", "template_xxx", emailParams, "Abc123456xyz")
+      .then(() => {
+        console.log("Email envoyé avec succès !");
+      })
+      .catch(error => {
+        console.error("Erreur lors de l'envoi de l'email :", error);
+      });
+
     window.location.href = "recu.html";
   });
 }
 
-// -------------------recu---------------------//
+// --------- PAGE REÇU ---------
 document.addEventListener("DOMContentLoaded", () => {
+  const recuContainer = document.getElementById("recu-details");
+  if (!recuContainer) return;
+
   const nomClient = localStorage.getItem("nomClient") || "Client inconnu";
   const totalCommande = localStorage.getItem("totalCommande") || "0";
   const panier = JSON.parse(localStorage.getItem("panier")) || [];
-
-  const recuContainer = document.getElementById("recu-details");
-  if (!recuContainer) return;
 
   const clientInfo = document.createElement("p");
   clientInfo.textContent = `👤 Nom du client : ${nomClient}`;
@@ -202,7 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <p>Couleur : ${item.color}</p>
       <p>Quantité : ${item.quantity}</p>
       <p>Prix unitaire : ${item.price.toLocaleString()} $</p>
-     
     `;
     recuContainer.appendChild(div);
   });
@@ -212,3 +234,15 @@ document.addEventListener("DOMContentLoaded", () => {
   totalDiv.textContent = `Total : ${parseFloat(totalCommande).toLocaleString()} $`;
   recuContainer.appendChild(totalDiv);
 });
+
+// --------- COMPTEUR DYNAMIQUE DU PANIER DANS LE HEADER ---------
+function updateCartCount() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const countElement = document.getElementById("cart-count");
+
+  if (countElement) {
+    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+    countElement.textContent = totalQuantity;
+    countElement.style.display = totalQuantity === 0 ? "none" : "inline-block";
+  }
+}

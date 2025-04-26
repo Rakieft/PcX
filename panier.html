@@ -23,9 +23,13 @@
       <nav class="nav">
         <ul>
           <li><a href="index.html">Accueil</a></li>
-          <li><a href="about.html">A propos</a></li>
+          <li><a href="about.html">À propos</a></li>
           <li><a href="contact.html">Contact</a></li>
-        </ul>
+          <li><a href="panier.html" class="cart-link">
+            <img src="image/panier.png" alt="Panier" width="24" height="24" />
+            Panier<span id="cart-count" class="cart-count">0</span>
+          </a></li>
+      </ul>
         
       </nav>
     </div>
@@ -52,8 +56,12 @@
 
     <div class="client-info">
       <label for="nom-client">Nom du client :</label>
-      <input type="text" id="nom-client" placeholder="Entrez votre nom complet" />
+      <input type="text" id="nom-client" placeholder="Entrez votre nom complet" required />
+    
+      <label for="email-client">Email du client :</label>
+      <input type="email" id="email-client" placeholder="Entrez votre adresse email" required />
     </div>
+    
 
     <div class="paiement-info">
       <h3>Informations de paiement</h3>
@@ -74,26 +82,51 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-container">
-      <div class="footer-links">
-        <a href="index.html">Accueil</a>
-        <a href="about.html">À propos</a>
-        <a href="contact.html">Contact</a>
-        <a href="panier.html">Panier</a>
+        <div class="footer-links">
+            <a href="index.html">Accueil</a>
+            <a href="about.html">À propos</a>
+            <a href="contact.html">Contact</a>
+            <a href="panier.html">Panier</a>
+            <a href="terms.html">Conditions d'utilisation</a>
+            <a href="privacy.html">Politique de confidentialité</a>
+        </div>
+        <div class="footer-contact">
+            <p><strong>Contactez-nous sur</strong></p>
+            <p>Email : <a href="mailto:kieftraphterjoly@gmail.com">kieftraphterjoly@gmail.com</a></p>
+            <p>Téléphone : <a href="tel:+44795902">+509 44795902</a></p>
+        </div>
+        <div class="footer-icons">
+          <p><strong>Suivez-nous sur</strong></p>
+              <a href="https://www.youtube.com/@rakieft" target="_blank" title="YouTube">
+                  <img src="image/youtube.png" alt="YouTube" class="social-icon" width="60" height="50" loading="lazy">
+              </a>
+              <a href="https://twitter.com/rakieft" target="_blank" title="Twitter">
+                  <img src="image/twitter.png" alt="Twitter" class="social-icon" width="50" height="50" loading="lazy">
+              </a>
+              <a href="https://www.linkedin.com/company/rakieft-webdev" target="_blank" title="LinkedIn">
+                  <img src="image/linkedin.png" alt="LinkedIn" class="social-icon" width="60" height="60" loading="lazy">
+              </a>
       </div>
-      <div class="footer-contact">
-        <p>Email : kieftraphterjoly@gmail.com</p>
-        <p>Téléphone : 44795902</p>
-      </div>
-      <div class="footer-socials">
-        <a href="#"><i class="fab fa-facebook-f"></i></a>
-        <a href="#"><i class="fab fa-instagram"></i></a>
-        <a href="#"><i class="fab fa-twitter"></i></a>
-      </div>
-      <p class="copyright">© 2025 Rakieft Webdev</p>
+        <div class="footer-newsletter">
+            <p><strong>Abonnez-vous à notre newsletter</strong></p>
+            <form action="#" method="post">
+                <input type="email" placeholder="Votre email" required>
+                <button type="submit">S'abonner</button>
+            </form>
+        </div>
+        <p class="copyright"></p>
     </div>
-  </footer>
+</footer>
 
   <!-- SCRIPT -->
   <script src="js/script.js"></script>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("TON_USER_ID"); // Remplace par ton User ID EmailJS
+    })();
+  </script>
 </body>
 </html>
