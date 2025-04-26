@@ -424,6 +424,26 @@ main {
   .add-to-cart:hover {
     background-color: #0056b3;
   }
+
+  @media (max-width: 1024px) {
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr); /* 3 produits par ligne */
+    }
+  }
+  
+  /* Responsive pour mobiles */
+  @media (max-width: 768px) {
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 produits par ligne sur mobile */
+    }
+  }
+  
+  /* Très petits écrans (optionnel, si tu veux 1 seul produit par ligne en dessous de 400px) */
+  @media (max-width: 400px) {
+    .products-grid {
+      grid-template-columns: 1fr; /* 1 produit par ligne */
+    }
+  }
   
 
 /* ======= FOOTER ======= */
@@ -956,15 +976,7 @@ footer .footer-contact a:hover {
 
     
 
-    /* .site-header img{
-      height: 159px;
-      width: 180px;
-      margin-bottom: 0.2rem;
-    } */
-
-    /* .nav a {
-      display: flex;
-    } */
+    
 
     .hero-banner {
       background: url('https://images.unsplash.com/photo-1657711772204-c90a591ad1e4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
