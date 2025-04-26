@@ -74,11 +74,13 @@ body {
 
   .logo-section {
     margin-bottom: 15px;
-    /* text-align: center; */
+    text-align: center;
   }
 
   .logo-section img {
    margin-left: 90px;
+   width: 250px;
+   height: 159px;
   }
 
   .nav ul {
