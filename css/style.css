@@ -78,13 +78,15 @@ body {
   display: none;
   /* flex-direction: column; */
   margin-top: 10px;
+  margin-left: 25px;
 }
 
 .mobile-nav a {
-  /* padding: 0.5rem; */
+  padding: 1rem 15px;
   text-decoration: none;
   color: #333;
   background-color: aliceblue;
+  
 
 }
 
