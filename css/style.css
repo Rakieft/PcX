@@ -81,7 +81,7 @@ body {
 }
 
 .mobile-nav a {
-  padding: 0.5rem 21px;
+  padding: 0.5rem 20px;
   text-decoration: none;
   color: #333;
   background-color: aliceblue;
@@ -173,7 +173,7 @@ body {
     top: 60px;
     right: 0;
     width: 200px;
-    padding: 8px;
+    /* padding: 80px; */
     font-size: 12px;
   }
 
