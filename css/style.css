@@ -78,11 +78,11 @@ body {
   display: none;
   /* flex-direction: column; */
   margin-top: 10px;
-  margin-left: 25px;
+  margin-left: 20px;
 }
 
 .mobile-nav a {
-  padding: 1rem 15px;
+  padding: 1rem 10px;
   text-decoration: none;
   color: #333;
   background-color: aliceblue;
