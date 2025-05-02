@@ -15,25 +15,51 @@
 <body>
 
   <!-- HEADER -->
-  <header class="site-header">
-    <div class="container nav-container">
-      <div class="logo-section">
-        <img src="image/head.png" alt="Main visual" loading="lazy"/>
-      </div>
-      <nav class="nav">
-        <ul>
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="about.html">A propos</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="panier.html" class="cart-link">
-            <img src="image/panier.png" alt="Panier" width="24" height="24" />
-            Panier🛒<span id="cart-count" class="cart-count">0</span>
-          </a></li>
-        </ul>
-        
-      </nav>
+  <!-- HEADER -->
+<header class="site-header">
+  <div class="container nav-container">
+    <div class="logo-toggle">
+      <img src="image/head.png" alt="Logo" class="logo" />
+      <button class="menu-toggle" onclick="toggleMobileNav()">☰</button>
     </div>
-  </header>
+
+    <!-- Search bar desktop -->
+    <div class="search-bar">
+      <input type="text" class="search-bar-input" placeholder="Rechercher un produit...">
+    </div>
+
+    <!-- Navigation desktop -->
+    <nav class="nav desktop-nav">
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="about.html">À propos</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <!-- <li><a href="langue.html">Langue</a></li> -->
+        <li><a href="panier.html" class="cart-link">
+          🛒 Panier <span id="cart-count" class="cart-count">0</span>
+        </a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Menu mobile déroulant -->
+  <nav class="mobile-nav" id="mobileMenu">
+    <a href="index.html">Accueil</a>
+    <a href="about.html">À propos</a>
+    <a href="contact.html">Contact</a>
+    <!-- <a href="langue.html">Langue</a> -->
+    <a href="panier.html" class="cart-link">🛒 Panier</a>
+  </nav>
+
+  <!-- Barre du bas pour mobile -->
+  <div class="mobile-bottom-bar">
+    <a href="panier.html" class="cart-link">
+      🛒 Panier <span id="cart-count-mobile" class="cart-count">0</span>
+    </a>
+    <input type="text" placeholder="Recherche..." class="mobile-search"/>
+  </div>
+</header>
+
 
   <!-- SOUS-MENU PRODUITS -->
   <nav class="product-submenu">
@@ -179,5 +205,12 @@
 
 <!-- SCRIPTS -->
 <script src="js/script.js"></script>
+
+<script>
+  function toggleMobileNav() {
+    const menu = document.getElementById('mobileMenu');
+    menu.classList.toggle('active');
+  }
+</script>
 </body>
 </html>

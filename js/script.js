@@ -1,9 +1,9 @@
 console.log("Script JS chargé !");
 
 document.addEventListener("DOMContentLoaded", function () {
+  // Menu mobile
   const menuToggle = document.getElementById("mobile-menu");
   const navLinks = document.querySelector(".nav-links");
-
   if (menuToggle && navLinks) {
     menuToggle.addEventListener("click", () => {
       navLinks.classList.toggle("active");
@@ -16,43 +16,47 @@ document.addEventListener("DOMContentLoaded", function () {
   setupCheckoutButton();
   updateCartCount();
   loadRecuPage();
+  setupSearchBar();
+  fetchWeather();
 });
 
-// --------- MÉTÉO ---------
-const apiKey = '9f26309485957c2bd9641a631b5817c8';
-const city = 'HAITI';
-const units = 'imperial';
-const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`;
-const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${units}&appid=${apiKey}`;
+// -------- MÉTÉO --------
+function fetchWeather() {
+  const apiKey = '9f26309485957c2bd9641a631b5817c8';
+  const city = 'HAITI';
+  const units = 'imperial';
+  const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&appid=${apiKey}`;
+  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=${units}&appid=${apiKey}`;
 
-// METEO ACTUELLE
-fetch(weatherUrl)
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById('current-temp').textContent = `${Math.round(data.main.temp)}°F`;
-    document.getElementById('weather-description').textContent = data.weather[0].description;
-    document.getElementById('high-temp').textContent = `${Math.round(data.main.temp_max)}°F`;
-    document.getElementById('low-temp').textContent = `${Math.round(data.main.temp_min)}°F`;
-    document.getElementById('humidity').textContent = `${data.main.humidity}%`;
-    document.getElementById('sunrise').textContent = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
-    document.getElementById('sunset').textContent = new Date(data.sys.sunset * 1000).toLocaleTimeString();
-    document.getElementById('weather-icon').src = `images/weather.svg`;
-    document.getElementById('weather-icon').alt = data.weather[0].description;
-  })
-  .catch(err => console.error('Erreur météo actuelle :', err));
+  // Météo actuelle
+  fetch(weatherUrl)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('current-temp').textContent = `${Math.round(data.main.temp)}°F`;
+      document.getElementById('weather-description').textContent = data.weather[0].description;
+      document.getElementById('high-temp').textContent = `${Math.round(data.main.temp_max)}°F`;
+      document.getElementById('low-temp').textContent = `${Math.round(data.main.temp_min)}°F`;
+      document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+      document.getElementById('sunrise').textContent = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
+      document.getElementById('sunset').textContent = new Date(data.sys.sunset * 1000).toLocaleTimeString();
+      document.getElementById('weather-icon').src = `images/weather.svg`;
+      document.getElementById('weather-icon').alt = data.weather[0].description;
+    })
+    .catch(err => console.error('Erreur météo actuelle :', err));
 
-// METEO PRÉVISION
-fetch(forecastUrl)
-  .then(res => res.json())
-  .then(data => {
-    const days = [0, 8, 16];
-    document.getElementById('day1-temp').textContent = `${Math.round(data.list[days[0]].main.temp)}°F`;
-    document.getElementById('day2-temp').textContent = `${Math.round(data.list[days[1]].main.temp)}°F`;
-    document.getElementById('day3-temp').textContent = `${Math.round(data.list[days[2]].main.temp)}°F`;
-  })
-  .catch(err => console.error('Erreur météo prévision :', err));
+  // Prévision
+  fetch(forecastUrl)
+    .then(res => res.json())
+    .then(data => {
+      const days = [0, 8, 16];
+      document.getElementById('day1-temp').textContent = `${Math.round(data.list[days[0]].main.temp)}°F`;
+      document.getElementById('day2-temp').textContent = `${Math.round(data.list[days[1]].main.temp)}°F`;
+      document.getElementById('day3-temp').textContent = `${Math.round(data.list[days[2]].main.temp)}°F`;
+    })
+    .catch(err => console.error('Erreur météo prévision :', err));
+}
 
-// --------- AJOUTER AU PANIER ---------
+// -------- AJOUT AU PANIER --------
 function setupAddToCartButtons() {
   const addButtons = document.querySelectorAll(".add-to-cart");
 
@@ -88,7 +92,7 @@ function setupAddToCartButtons() {
   });
 }
 
-// --------- AFFICHER LE PANIER ---------
+// -------- AFFICHAGE PANIER --------
 function loadCartItems() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const container = document.getElementById("cart-container");
@@ -119,7 +123,7 @@ function loadCartItems() {
   updateCartTotal();
 }
 
-// --------- SUPPRIMER PRODUIT ---------
+// -------- SUPPRESSION PRODUIT --------
 function setupRemoveButtons() {
   const buttons = document.querySelectorAll('.remove-btn');
   buttons.forEach(button => {
@@ -147,7 +151,7 @@ function removeFromCart(id, color) {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// --------- TOTAL ---------
+// -------- TOTAL PANIER --------
 function updateCartTotal() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const total = cart.reduce((sum, p) => sum + (p.price * p.quantity), 0);
@@ -159,7 +163,7 @@ function updateCartTotal() {
   if (totalElement) totalElement.textContent = `${total.toLocaleString()} $`;
 }
 
-// --------- CHECKOUT ---------
+// -------- CHECKOUT --------
 function setupCheckoutButton() {
   const checkoutBtn = document.getElementById("checkout-btn");
   if (!checkoutBtn) return;
@@ -180,7 +184,6 @@ function setupCheckoutButton() {
     localStorage.setItem("totalCommande", total);
     localStorage.setItem("panier", JSON.stringify(cart));
 
-    // EmailJS - envoi du reçu
     const emailParams = {
       nom_client: nomClient,
       total_commande: `${total.toLocaleString()} $`,
@@ -191,19 +194,16 @@ function setupCheckoutButton() {
       email_vendeur: "kieftraphterjoly@gmail.com"
     };
 
+    // Remplace les ID ci-dessous avec tes vraies clés EmailJS
     emailjs.send("service_xxx", "template_xxx", emailParams, "Abc123456xyz")
-      .then(() => {
-        console.log("Email envoyé avec succès !");
-      })
-      .catch(error => {
-        console.error("Erreur lors de l'envoi de l'email :", error);
-      });
+      .then(() => console.log("Email envoyé avec succès !"))
+      .catch(error => console.error("Erreur lors de l'envoi de l'email :", error));
 
     window.location.href = "recu.html";
   });
 }
 
-// --------- PAGE REÇU ---------
+// -------- PAGE REÇU --------
 function loadRecuPage() {
   const recuContainer = document.getElementById("recu-details");
   if (!recuContainer) return;
@@ -217,9 +217,7 @@ function loadRecuPage() {
   recuContainer.appendChild(clientInfo);
 
   if (panier.length === 0) {
-    const emptyMsg = document.createElement("p");
-    emptyMsg.textContent = "Aucun article trouvé dans la commande.";
-    recuContainer.appendChild(emptyMsg);
+    recuContainer.innerHTML += "<p>Aucun article trouvé dans la commande.</p>";
     return;
   }
 
@@ -242,14 +240,30 @@ function loadRecuPage() {
   recuContainer.appendChild(totalDiv);
 }
 
-// --------- COMPTEUR DYNAMIQUE DU PANIER DANS LE HEADER ---------
+// -------- COMPTEUR PANIER --------
 function updateCartCount() {
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  const countElement = document.getElementById("cart-count");
+  const count = cart.reduce((total, item) => total + (item.quantity || 1), 0);
 
-  if (countElement) {
-    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
-    countElement.textContent = totalQuantity;
-    countElement.style.display = totalQuantity === 0 ? "none" : "inline-block";
-  }
+  const desktopCount = document.getElementById("cart-count");
+  const mobileCount = document.getElementById("cart-count-mobile");
+
+  if (desktopCount) desktopCount.textContent = count;
+  if (mobileCount) mobileCount.textContent = count;
+}
+
+// -------- BARRE DE RECHERCHE --------
+function setupSearchBar() {
+  const searchInput = document.querySelector(".search-bar-input");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    const products = document.querySelectorAll(".product-card");
+
+    products.forEach(product => {
+      const name = product.dataset.name.toLowerCase();
+      product.style.display = name.includes(query) ? "block" : "none";
+    });
+  });
 }
